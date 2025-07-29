@@ -12,7 +12,7 @@ def get_data_from_db():
     """Fetch all data from SQLite database"""
     try:
         # Connect to SQLite database
-        conn = sqlite3.connect("/Users/danielwanganga/Documents/Airtel_AI/leave_management.db")  # Update with your actual database name
+        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
         
         # Fetch employee/partner data
         employee_query = """
