@@ -29,7 +29,7 @@ def get_data_from_db():
             e.Partner_Name,
             e.Department
         FROM leave_entries l
-        LEFT JOIN employee_table_rows e ON l.leave_id = e.id
+        LEFT JOIN employee_table e ON l.leave_id = e.id
         ORDER BY l.id DESC
         """
         leave_data = pd.read_sql_query(leave_query, conn)
