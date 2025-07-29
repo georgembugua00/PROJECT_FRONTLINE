@@ -7,7 +7,7 @@ import uuid # Needed for potential record IDs if adding/modifying leaves
 from datetime import datetime, timedelta # Needed for date handling
 
 # --- Database connection path for leave management ---
-LEAVE_DB_PATH = 'leave_management.db'
+LEAVE_DB_PATH = '../leave_management.db'
 
 def init_leave_db():
     """Initializes the leave_management table if it doesn't exist."""
