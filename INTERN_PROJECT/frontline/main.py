@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # Database file path
-DATABASE_PATH = "/Users/danielwanganga/Documents/Airtel_AI/leave_management.db"
+DATABASE_PATH = "/leave_management.db"
 
 # Initialize SQLite database
     
