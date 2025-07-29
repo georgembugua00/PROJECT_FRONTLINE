@@ -1,0 +1,11 @@
+langchain
+streamlit-calendar
+faiss-cpu
+streamlit
+langchain-community
+python-dotenv
+supabase
+streamlit-oauth
+langchain-experimental
+langchain-ollama
+pdfplumber

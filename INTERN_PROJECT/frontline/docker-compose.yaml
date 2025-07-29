@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ollama-container:
+    image: ollama/ollama:latest
+    container_name: frontline-ollama-container-1
+    volumes:
+      - ./data/ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - ollama-net
+
+
+  streamlit-app:
+    image: sha256:31823558a169d5679fee2bc20df11120794e0f603e624fae1a74fd9f0c1b06df
+    container_name: frontline-streamlit-app-1
+    ports:
+      - "8501:8501"
+    networks:
+      - ollama-net
+    depends_on:
+      - ollama-container
+
+networks:
+  ollama-net:
+    driver: bridge

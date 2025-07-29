@@ -1,0 +1,4 @@
+plotly
+millify
+pandas
+streamlit
