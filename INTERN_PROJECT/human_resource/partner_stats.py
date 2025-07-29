@@ -33,7 +33,7 @@ def get_all_leaves():
     conn = sqlite3.connect(LEAVE_DB_PATH)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description, status FROM leaves")
+    c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description, status FROM leave_entries")
     rows = c.fetchall()
     conn.close()
     # Convert sqlite3.Row objects to dictionaries for serializability
