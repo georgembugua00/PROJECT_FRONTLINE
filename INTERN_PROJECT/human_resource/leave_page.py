@@ -4,7 +4,7 @@ import sqlite3
 from datetime import date, datetime
 
 # Define the path to your SQLite database
-DB_PATH = '/Users/danielwanganga/Documents/Airtel_AI/leave_management.db'
+DB_PATH = 'leave_management.db'
 
 def init_db():
     """
@@ -15,7 +15,7 @@ def init_db():
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute('''
-            CREATE TABLE IF NOT EXISTS leaves (
+            CREATE TABLE IF NOT EXISTS leave_entries (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 employee_name TEXT NOT NULL,
                 leave_type TEXT NOT NULL,
