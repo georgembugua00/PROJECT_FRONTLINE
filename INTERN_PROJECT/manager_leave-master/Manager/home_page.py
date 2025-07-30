@@ -5,7 +5,7 @@ import pandas as pd # Still useful for DataFrame conversion
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "leave_management"
+DB_NAME = "leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -165,7 +165,7 @@ def get_all_pending_leaves():
             # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
                 SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entries
+                FROM leave_entry
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
             """)
@@ -188,7 +188,7 @@ def get_approved_leaves():
             # Changed 'leave' to 'off_roll'
             cursor.execute("""
                 SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entries
+                FROM leave_entry
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
             """)
@@ -213,7 +213,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
+            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entry WHERE 1=1"
             params = []
 
             if status_filter:
@@ -251,7 +251,7 @@ def update_leave_status(leave_request_id, new_status, reason=""):
     if conn:
         try:
             cursor = conn.cursor()
-            update_sql = "UPDATE leave_entries SET status = ?"
+            update_sql = "UPDATE leave_entry SET status = ?"
             params = [new_status]
 
             if new_status == "Declined":
