@@ -3,6 +3,30 @@ from datetime import date, timedelta, datetime
 import sqlite3
 import pandas as pd # Still useful for DataFrame conversion
 
+import pandas as pd
+import sqlite3
+
+conn = sqlite3.connect('leave_management.db')
+
+employee_data = pd.read_csv("data/employee_table.csv")
+leave_entry_data = pd.read_csv("data/leave_entries.csv")
+leave_entitlements_data = pd.read_csv("data/leave_entitlements_data.csv")
+
+employee_data.to_sql(name="employee_table",con=conn,if_exists='replace',index=False)
+leave_entry_data.to_sql(name="leave_entry",con=conn,if_exists='replace',index=False)
+leave_entitlements_data.to_sql(name="leave_entitlements_data",con=conn,if_exists='replace',index=False)
+
+table_names = conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+print(table_names)
+
+leave_entitlement = conn.execute(("SELECT * FROM leave_entitlements_data")).fetchall()
+
+leave_entry = conn.execute(("SELECT * FROM leave_entry")).fetchall()
+
+print(leave_entry)
+
+#print(leave_entitlement)
+
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
 DB_NAME = "leave_management.db"
