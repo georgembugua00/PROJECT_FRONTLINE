@@ -3,7 +3,7 @@ import sqlite3
 from datetime import date, timedelta, datetime
 
 # --- SQLite Database Configuration ---
-DB_NAME = "/Users/danielwanganga/Documents/Airtel_AI/leave_management.db"
+DB_NAME = "INTERN_PROJECT/leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
