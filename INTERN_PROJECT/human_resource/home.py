@@ -11,6 +11,8 @@ from datetime import datetime
 def get_data_from_db():
     """Fetch all data from SQLite database"""
     try:
+        # Connect to SQLite database
+        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
                     # 1. Create employee_table_rows (formerly employee_table)
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS "employee_table" (
@@ -37,8 +39,6 @@ def get_data_from_db():
                     "position"	TEXT
                 );
             """)
-        # Connect to SQLite database
-        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
         
         # Fetch employee/partner data
         employee_query = """
