@@ -11,8 +11,34 @@ from datetime import datetime
 def get_data_from_db():
     """Fetch all data from SQLite database"""
     try:
+                    # 1. Create employee_table_rows (formerly employee_table)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS "employee_table" (
+                    "Username"	INTEGER,
+                    "First_Name"	TEXT,
+                    "Middle_Name"	TEXT,
+                    "Surname_Name"	TEXT,
+                    "AUUID"	INTEGER,
+                    "Employee_ID"	INTEGER,
+                    "Email"	TEXT,
+                    "Manager"	TEXT,
+                    "Date_of_Join"	TEXT,
+                    "OPCO_Region"	TEXT,
+                    "Organization"	TEXT,
+                    "Department"	TEXT,
+                    "Sub_Department"	TEXT,
+                    "Person_Type"	TEXT,
+                    "Personal_Mobile"	INTEGER,
+                    "Partner_Name"	TEXT,
+                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+                    "uuid"	TEXT UNIQUE, -- Assuming 'uuid' is the unique identifier for external linking
+                    "gender"	TEXT,
+                    "password"	TEXT,
+                    "position"	TEXT
+                );
+            """)
         # Connect to SQLite database
-        conn = sqlite3.connect("fap.db")  # Update with your actual database name
+        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
         
         # Fetch employee/partner data
         employee_query = """
