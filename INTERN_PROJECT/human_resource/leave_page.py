@@ -15,7 +15,7 @@ def init_db():
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute('''
-            CREATE TABLE IF NOT EXISTS leave_entries (
+            CREATE TABLE IF NOT EXISTS leave_entry (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 employee_name TEXT NOT NULL,
                 leave_type TEXT NOT NULL,
