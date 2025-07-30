@@ -43,7 +43,7 @@ def get_data_from_db():
             """)
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS leave_entries (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                leave_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 employee_name TEXT NOT NULL,
                 leave_type TEXT NOT NULL,
                 start_date TEXT NOT NULL, -- Changed to TEXT for ISO format
