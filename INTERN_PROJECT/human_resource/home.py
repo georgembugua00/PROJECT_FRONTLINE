@@ -16,7 +16,7 @@ def get_data_from_db():
         
         # Fetch employee/partner data
         employee_query = """
-        SELECT * FROM employees 
+        SELECT * FROM employee_table 
         -- Add any joins if needed for partner information
         """
         data = pd.read_sql_query(employee_query, conn)
