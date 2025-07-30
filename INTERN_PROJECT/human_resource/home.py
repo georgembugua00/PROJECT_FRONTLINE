@@ -55,7 +55,8 @@ def get_data_from_db():
                 recall_reason TEXT
             )
         ''')
-        conn.        
+        conn.commit()
+        conn.close()
         
         # Fetch employee/partner data
         employee_query = """
