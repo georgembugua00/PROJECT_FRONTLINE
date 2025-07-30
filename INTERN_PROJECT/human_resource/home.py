@@ -8,7 +8,7 @@ from datetime import datetime
 
 conn = sqlite3.connect('leave_management.db')
 
-employee_data = pd.read_csv(r"data\employee_table.csv")
+employee_data = pd.read_csv(r"data/employee_table.csv")
 leave_entry_data = pd.read_csv("./data/leave_entries.csv")
 leave_entitlements_data = pd.read_csv("./data/leave_entitlements_data.csv")
 
