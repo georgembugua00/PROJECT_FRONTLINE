@@ -5,7 +5,7 @@ import pandas as pd # Still useful for DataFrame conversion
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "frontline_agents_portal.db"
+DB_NAME = "leave_management"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -30,7 +30,7 @@ def create_tables():
 
             # 1. Create employee_table_rows
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "employee_table_rows" (
+                CREATE TABLE IF NOT EXISTS "employee_table" (
                     "Username"	INTEGER,
                     "First_Name"	TEXT,
                     "Middle_Name"	TEXT,
@@ -62,8 +62,8 @@ def create_tables():
             # is managing 'off_roll' entries. If you truly have a table named 'leave' for this view,
             # please provide its exact schema.
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "off_roll" (
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+                CREATE TABLE IF NOT EXISTS "leave_entries" (
+                    "leave_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
                     "employee_id"   TEXT NOT NULL, -- Links to employee_table_rows.uuid
                     "employee_name"	TEXT NOT NULL,
                     "leave_type"	TEXT NOT NULL,
@@ -164,7 +164,7 @@ def get_all_pending_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
@@ -187,7 +187,7 @@ def get_approved_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll'
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
@@ -213,7 +213,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
+            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
             params = []
 
             if status_filter:
@@ -251,7 +251,7 @@ def update_leave_status(leave_request_id, new_status, reason=""):
     if conn:
         try:
             cursor = conn.cursor()
-            update_sql = "UPDATE off_roll SET status = ?"
+            update_sql = "UPDATE leave_entries SET status = ?"
             params = [new_status]
 
             if new_status == "Declined":

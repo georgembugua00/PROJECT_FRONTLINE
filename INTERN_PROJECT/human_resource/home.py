@@ -12,11 +12,54 @@ def get_data_from_db():
     """Fetch all data from SQLite database"""
     try:
         # Connect to SQLite database
-        conn = sqlite3.connect("../leave_management.db")  # Update with your actual database name
+        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
+                    # 1. Create employee_table_rows (formerly employee_table)
+
+        cursor = conn.cursor()
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS "employee_table" (
+                    "Username"	INTEGER,
+                    "First_Name"	TEXT,
+                    "Middle_Name"	TEXT,
+                    "Surname_Name"	TEXT,
+                    "AUUID"	INTEGER,
+                    "Employee_ID"	INTEGER,
+                    "Email"	TEXT,
+                    "Manager"	TEXT,
+                    "Date_of_Join"	TEXT,
+                    "OPCO_Region"	TEXT,
+                    "Organization"	TEXT,
+                    "Department"	TEXT,
+                    "Sub_Department"	TEXT,
+                    "Person_Type"	TEXT,
+                    "Personal_Mobile"	INTEGER,
+                    "Partner_Name"	TEXT,
+                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+                    "uuid"	TEXT UNIQUE, -- Assuming 'uuid' is the unique identifier for external linking
+                    "gender"	TEXT,
+                    "password"	TEXT,
+                    "position"	TEXT
+                );
+            """)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS leave_entries (
+                leave_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                employee_name TEXT NOT NULL,
+                leave_type TEXT NOT NULL,
+                start_date TEXT NOT NULL, -- Changed to TEXT for ISO format
+                end_date TEXT NOT NULL,   -- Changed to TEXT for ISO format
+                description TEXT,
+                attachment BOOLEAN,
+                status TEXT NOT NULL,
+                decline_reason TEXT,
+                recall_reason TEXT
+            )
+        ''')
+        conn.commit()
         
         # Fetch employee/partner data
         employee_query = """
-        SELECT * FROM employees 
+        SELECT * FROM employee_table 
         -- Add any joins if needed for partner information
         """
         data = pd.read_sql_query(employee_query, conn)
