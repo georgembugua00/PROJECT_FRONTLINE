@@ -5,12 +5,31 @@ import plotly.graph_objects as go
 from millify import prettify
 import sqlite3
 from datetime import datetime
+import os
 
-conn = sqlite3.connect('INTERN_PROJECT/leave_management.db')
+# Get the base directory where this script is located
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-employee_data = pd.read_csv("INTERN_PROJECT/data/employee_table.csv")
-leave_entry_data = pd.read_csv("INTERN_PROJECT//data/leave_entries.csv")
-leave_entitlements_data = pd.read_csv("INTERN_PROJECT//data/leave_entitlements_data.csv")
+# Go one level up to reach INTERN_PROJECT from human_resource
+project_dir = os.path.dirname(base_dir)
+
+# Build the path to leave_management.db
+db_path = os.path.join(project_dir, 'leave_management.db')
+
+# Build the path to leave_management.db
+employee_table_path = os.path.join(project_dir, 'data/employee_table.csv')
+
+# Build the path to leave_management.db
+leave_entry_path = os.path.join(project_dir, 'data/leave_entries.csv')
+
+# Build the path to leave_management.db
+leave_entitlements_path = os.path.join(project_dir, 'data/leave_entitlements_data.csv')
+
+# Connect to the database
+conn = sqlite3.connect(db_path)
+employee_data = pd.read_csv(employee_table_path)
+leave_entry_data = pd.read_csv(leave_entry_path)
+leave_entitlements_data = pd.read_csv(leave_entitlements_path)
 
 employee_data.to_sql(name="employee_table",con=conn,if_exists='replace',index=False)
 leave_entry_data.to_sql(name="leave_entry",con=conn,if_exists='replace',index=False)
@@ -34,47 +53,7 @@ def get_data_from_db():
         conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
                     # 1. Create employee_table_rows (formerly employee_table)
 
-        cursor = conn.cursor()
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS "employee_table" (
-                    "Username"	INTEGER,
-                    "First_Name"	TEXT,
-                    "Middle_Name"	TEXT,
-                    "Surname_Name"	TEXT,
-                    "AUUID"	INTEGER,
-                    "Employee_ID"	INTEGER,
-                    "Email"	TEXT,
-                    "Manager"	TEXT,
-                    "Date_of_Join"	TEXT,
-                    "OPCO_Region"	TEXT,
-                    "Organization"	TEXT,
-                    "Department"	TEXT,
-                    "Sub_Department"	TEXT,
-                    "Person_Type"	TEXT,
-                    "Personal_Mobile"	INTEGER,
-                    "Partner_Name"	TEXT,
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-                    "uuid"	TEXT UNIQUE, -- Assuming 'uuid' is the unique identifier for external linking
-                    "gender"	TEXT,
-                    "password"	TEXT,
-                    "position"	TEXT
-                );
-            """)
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS leave_entries (
-                leave_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                employee_name TEXT NOT NULL,
-                leave_type TEXT NOT NULL,
-                start_date TEXT NOT NULL, -- Changed to TEXT for ISO format
-                end_date TEXT NOT NULL,   -- Changed to TEXT for ISO format
-                description TEXT,
-                attachment BOOLEAN,
-                status TEXT NOT NULL,
-                decline_reason TEXT,
-                recall_reason TEXT
-            )
-        ''')
-        conn.commit()
+
         
         # Fetch employee/partner data
         employee_query = """
@@ -90,7 +69,7 @@ def get_data_from_db():
             e.First_Name as employee_name,
             e.Partner_Name,
             e.Department
-        FROM leave_entries l
+        FROM leave_entry l
         LEFT JOIN employee_table e ON l.leave_id = e.id
         ORDER BY l.leave_id DESC
         """
