@@ -6,8 +6,6 @@ from millify import prettify
 import sqlite3
 from datetime import datetime
 
-import pandas as pd
-
 conn = sqlite3.connect('leave_management.db')
 
 employee_data = pd.read_csv("employee_table.csv")
