@@ -15,7 +15,7 @@ def init_db():
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute('''
-            CREATE TABLE IF NOT EXISTS leave_entries (
+            CREATE TABLE IF NOT EXISTS leave_entry (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 employee_name TEXT NOT NULL,
                 leave_type TEXT NOT NULL,
@@ -43,7 +43,7 @@ def apply_for_leave(employee_name, leave_type, start_date, end_date, description
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute('''
-            INSERT INTO leave_entries (employee_name, leave_type, start_date, end_date, description, attachment, status)
+            INSERT INTO leave_entry (employee_name, leave_type, start_date, end_date, description, attachment, status)
             VALUES (?, ?, ?, ?, ?, ?, 'Pending')
         ''', (employee_name, leave_type, start_date.isoformat(), end_date.isoformat(), description, attachment))
         conn.commit()
@@ -61,7 +61,7 @@ def get_leave_history(employee_name):
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row # Enable dictionary-like access
         c = conn.cursor()
-        c.execute("SELECT leave_type, start_date, end_date, description, status FROM leave_entries WHERE employee_name = ?", (employee_name,))
+        c.execute("SELECT leave_type, start_date, end_date, description, status FROM leave_entry WHERE employee_name = ?", (employee_name,))
         history = [dict(row) for row in c.fetchall()]
         conn.close()
         return history
@@ -78,7 +78,7 @@ def get_all_pending_leaves():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
-        c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description FROM leave_entries WHERE status = 'Pending'")
+        c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description FROM leave_entry WHERE status = 'Pending'")
         pending_leaves = [dict(row) for row in c.fetchall()]
         conn.close()
         return pending_leaves
@@ -94,13 +94,13 @@ def update_leave_status(leave_id, new_status, reason=None):
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         if new_status == "Declined":
-            c.execute("UPDATE leave_entries SET status = ?, decline_reason = ?, recall_reason = '' WHERE id = ?", (new_status, reason, leave_id))
+            c.execute("UPDATE leave_entry SET status = ?, decline_reason = ?, recall_reason = '' WHERE id = ?", (new_status, reason, leave_id))
         elif new_status == "Recalled":
-            c.execute("UPDATE leave_entries SET status = ?, recall_reason = ?, decline_reason = '' WHERE id = ?", (new_status, reason, leave_id))
+            c.execute("UPDATE leave_entry SET status = ?, recall_reason = ?, decline_reason = '' WHERE id = ?", (new_status, reason, leave_id))
         elif new_status == "Withdrawn":
-            c.execute("UPDATE leave_entries SET status = ?, recall_reason = ?, decline_reason = '' WHERE id = ?", (new_status, reason, leave_id))
+            c.execute("UPDATE leave_entry SET status = ?, recall_reason = ?, decline_reason = '' WHERE id = ?", (new_status, reason, leave_id))
         else: # Approved
-            c.execute("UPDATE leave_entries SET status = ?, decline_reason = '', recall_reason = '' WHERE id = ?", (new_status, leave_id))
+            c.execute("UPDATE leave_entry SET status = ?, decline_reason = '', recall_reason = '' WHERE id = ?", (new_status, leave_id))
         conn.commit()
         conn.close()
         st.success(f"Leave ID {leave_id} status updated to {new_status}")
@@ -117,7 +117,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
         
-        query = "SELECT employee_name, leave_type, start_date, end_date, status, description, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
+        query = "SELECT employee_name, leave_type, start_date, end_date, status, description, decline_reason, recall_reason FROM leave_entry WHERE 1=1"
         params = []
 
         if status_filter:
@@ -150,7 +150,7 @@ def get_all_employees():
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
-        c.execute("SELECT DISTINCT employee_name FROM leave_entries")
+        c.execute("SELECT DISTINCT employee_name FROM leave_entry")
         employees = [row[0] for row in c.fetchall()]
         conn.close()
         return employees
@@ -167,7 +167,7 @@ def get_all_leaves():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
-        c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description, status FROM leave_entries")
+        c.execute("SELECT id, employee_name, leave_type, start_date, end_date, description, status FROM leave_entry")
         rows = c.fetchall()
         conn.close()
         
@@ -186,7 +186,7 @@ def withdraw_leave(leave_id, recall_reason=None):
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
-        c.execute("UPDATE leave_entries SET status = 'Withdrawn', recall_reason = ?, decline_reason = '' WHERE id = ?", (recall_reason, leave_id))
+        c.execute("UPDATE leave_entry SET status = 'Withdrawn', recall_reason = ?, decline_reason = '' WHERE id = ?", (recall_reason, leave_id))
         conn.commit()
         conn.close()
         st.info(f"Leave ID {leave_id} withdrawn.")
@@ -215,7 +215,7 @@ def get_approved_days_for_partner_by_year(partner_name, year):
         # Query for dates within the specified year
         c.execute(f"""
             SELECT start_date, end_date
-            FROM leave_entries
+            FROM leave_entry
             WHERE status = 'Approved'
             AND employee_name LIKE ?
             AND SUBSTR(start_date, 1, 4) = ?
@@ -241,7 +241,7 @@ def get_denied_requests_for_partner_by_year(partner_name, year):
         c = conn.cursor()
         c.execute(f"""
             SELECT COUNT(id)
-            FROM leave_entries
+            FROM leave_entry
             WHERE status = 'Declined'
             AND employee_name LIKE ?
             AND SUBSTR(start_date, 1, 4) = ?
@@ -263,7 +263,7 @@ def get_cumulated_leave_days_for_partner_by_year(partner_name, year):
         c = conn.cursor()
         c.execute(f"""
             SELECT start_date, end_date
-            FROM leave_entries
+            FROM leave_entry
             WHERE status IN ('Approved', 'Pending')
             AND employee_name LIKE ?
             AND SUBSTR(start_date, 1, 4) = ?
@@ -292,7 +292,7 @@ def get_upcoming_leaves():
         today = date.today().isoformat()
         c.execute("""
             SELECT employee_name, leave_type, start_date, end_date
-            FROM leave_entries
+            FROM leave_entry
             WHERE status = 'Approved' AND start_date > ?
             ORDER BY start_date ASC
         """, (today,))
@@ -317,7 +317,7 @@ def get_current_leaves():
         today = date.today().isoformat()
         c.execute("""
             SELECT employee_name, leave_type, start_date, end_date
-            FROM leave_entries
+            FROM leave_entry
             WHERE status = 'Approved' AND start_date <= ? AND end_date >= ?
             ORDER BY start_date ASC
         """, (today, today))
