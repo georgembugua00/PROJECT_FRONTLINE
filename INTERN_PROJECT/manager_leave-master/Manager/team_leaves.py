@@ -9,7 +9,7 @@ import pandas as pd
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "leave_management.db"
+DB_NAME = "/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -21,87 +21,7 @@ def init_db():
         st.error(f"Error connecting to database: {e}")
         return None
 
-def create_tables():
-    """
-    Creates necessary tables if they don't exist based on the provided schemas.
-    IMPORTANT: Ensures 'status' column is present in 'off_roll'/'leave' table
-    and handles 'decline_reason'/'recall_reason' defaults.
-    """
-    conn = init_db()
-    if conn:
-        try:
-            cursor = conn.cursor()
 
-            # 1. Create employee_table_rows
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "employee_table" (
-                    "Username"	INTEGER,
-                    "First_Name"	TEXT,
-                    "Middle_Name"	TEXT,
-                    "Surname_Name"	TEXT,
-                    "AUUID"	INTEGER,
-                    "Employee_ID"	INTEGER,
-                    "Email"	TEXT,
-                    "Manager"	TEXT,
-                    "Date_of_Join"	TEXT,
-                    "OPCO_Region"	TEXT,
-                    "Organization"	TEXT,
-                    "Department"	TEXT,
-                    "Sub_Department"	TEXT,
-                    "Person_Type"	TEXT,
-                    "Personal_Mobile"	INTEGER,
-                    "Partner_Name"	TEXT,
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-                    "uuid"	TEXT UNIQUE, -- Assuming 'uuid' is the unique identifier for external linking
-                    "gender"	TEXT,
-                    "password"	TEXT,
-                    "position"	TEXT
-                );
-            """)
-
-            # 2. Create off_roll (This was 'leave' in your previous snippet but 'off_roll' in the employee file)
-            # Consistency is key. Assuming 'off_roll' as the master table for leave applications.
-            # If 'leave' is a separate table, define its schema clearly.
-            # For now, I will use 'off_roll' as used in employee_leave.py, assuming this manager view
-            # is managing 'off_roll' entries. If you truly have a table named 'leave' for this view,
-            # please provide its exact schema.
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "leave_entry" (
-                    "leave_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-                    "employee_id"   TEXT NOT NULL, -- Links to employee_table_rows.uuid
-                    "employee_name"	TEXT NOT NULL,
-                    "leave_type"	TEXT NOT NULL,
-                    "start_date"	TEXT NOT NULL,
-                    "end_date"	TEXT NOT NULL,
-                    "description"	TEXT DEFAULT '', -- Made nullable, set default to empty string if NOT NULL
-                    "attachment"	INTEGER DEFAULT 0, -- BOOLEAN is INTEGER in SQLite (0 or 1)
-                    "status"    TEXT DEFAULT 'Pending', -- CRITICAL ADDITION
-                    "decline_reason"    TEXT DEFAULT '', -- Default empty string due to NOT NULL
-                    "recall_reason" TEXT DEFAULT '', -- Default empty string due to NOT NULL
-                    FOREIGN KEY ("employee_id") REFERENCES "employee_table_rows"("uuid")
-                );
-            """)
-
-            # 3. Create leave_entitlements (Corrected name from "leave_entitlements (1)")
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "leave_entitlements" (
-                    "employee_id"	TEXT PRIMARY KEY, -- Links to employee_table_rows.uuid
-                    "annual_leave"	INTEGER NOT NULL,
-                    "sick_leave"	INTEGER NOT NULL,
-                    "compensation_leave"	INTEGER NOT NULL,
-                    "maternity_leave_days"	INTEGER NOT NULL,
-                    "paternity_leave_days"	INTEGER NOT NULL,
-                    FOREIGN KEY("employee_id") REFERENCES "employee_table_rows"("uuid")
-                );
-            """)
-            conn.commit()
-        except sqlite3.Error as e:
-            st.error(f"Error creating tables: {e}")
-        finally:
-            conn.close()
-
-# Call create_tables once when the application starts
-create_tables()
 
 # --- Employee Data Retrieval Functions ---
 
@@ -169,7 +89,7 @@ def get_all_pending_leaves():
             # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
                 SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entry
+                FROM leave_entries
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
             """)
@@ -192,7 +112,7 @@ def get_approved_leaves():
             # Changed 'leave' to 'off_roll'
             cursor.execute("""
                 SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entry
+                FROM leave_entries
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
             """)
@@ -217,7 +137,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entry WHERE 1=1"
+            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
             params = []
 
             if status_filter:
@@ -255,7 +175,7 @@ def update_leave_status(leave_request_id, new_status, reason=""):
     if conn:
         try:
             cursor = conn.cursor()
-            update_sql = "UPDATE leave_entry SET status = ?"
+            update_sql = "UPDATE leave_entries SET status = ?"
             params = [new_status]
 
             if new_status == "Declined":

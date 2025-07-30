@@ -23,6 +23,13 @@ landing_page = st.Page(
     default=True
 )
 
+leave_centre = st.Page(
+    page="leave_centre.py",
+    title="Leave Hub",
+    icon=":material/support_agent:",
+    default=False
+)
+
 
 
 team_overview = st.Page(
@@ -36,6 +43,7 @@ team_overview = st.Page(
 # ========== NAVIGATION ==========
 page_navigator = st.navigation({
     "Home Page" : [landing_page],
+    "Leave Hub" : [leave_centre],
     "Team Overview": [team_overview],
 })
 
