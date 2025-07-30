@@ -5,7 +5,7 @@ import pandas as pd # Still useful for DataFrame conversion
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "/Users/danielwanganga/Documents/Airtel_AI/leave_management.db"
+DB_NAME = "leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
