@@ -213,7 +213,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
+            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
             params = []
 
             if status_filter:
