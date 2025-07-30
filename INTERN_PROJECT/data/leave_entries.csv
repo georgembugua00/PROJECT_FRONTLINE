@@ -1,0 +1,101 @@
+id,leave_id,employee_name,leave_type,start_date,end_date,description,attachment,status,decline_reason,recall_reason
+1,23269322-a83e-4270-897c-0e97feeb7286,George,Paternity,2025-07-31,2025-08-04,Paternity leave to support family after childbirth,0,Approved,,
+2,e6230ff7-5f34-4c4b-a1c6-2c8a4d1f3398,Linda,Annual,2025-08-20,2025-08-24,Annual leave for personal rest and travel,0,Withdrawn,,Not Needed Anymore
+3,56119333-be22-4ffa-b2cd-61fc2524dae5,Alice,Paternity,2025-08-04,2025-08-06,Paternity leave to support family after childbirth,0,Approved,,
+4,33454318-4cb5-420a-a05c-3ca0bdbabd89,Diana,Compassionate Leave,2025-08-15,2025-08-20,Leave due to loss or critical illness in the family,0,Approved,,
+5,2aeb2f1e-1266-4b97-b70a-b06c3c3bef72,Diana,Annual,2025-08-16,2025-08-20,Annual leave for personal rest and travel,0,Approved,,
+6,ec315b17-5ad0-47e0-a144-809b3ca66f20,John,Compassionate Leave,2025-08-13,2025-08-17,Leave due to loss or critical illness in the family,0,Pending,,
+7,cdd17d25-c684-4318-95eb-868b2412e898,Linda,Sick,2025-07-31,2025-08-03,Medical leave due to illness or health issues,0,Approved,,
+8,88e8e230-c630-408a-97e3-f3ea5d897ed7,Kevin,Study Leave,2025-08-07,2025-08-12,Time off granted for academic or exam preparation,0,Pending,,
+9,95f794ef-6580-41ad-8039-de0ff057292f,Alice,Paternity,2025-08-15,2025-08-16,Paternity leave to support family after childbirth,0,Pending,,
+10,2071f9a9-bcfd-4702-b0fd-d1c7333459d9,Brian,Maternity Leave,2025-08-21,2025-08-22,Maternity leave for child delivery and recovery,0,Approved,,
+11,ebde1c61-940c-4b90-a27d-d0d306ff71ad,Alice,Compassionate Leave,2025-08-27,2025-08-29,Leave due to loss or critical illness in the family,0,Approved,,
+12,cf5a15f4-f3b6-4715-935e-e77f968eeddc,Alice,Compassionate Leave,2025-08-05,2025-08-09,Leave due to loss or critical illness in the family,0,Withdrawn,,Schedule Conflict
+13,44a715ee-d7b3-4006-894e-9d23e7070c6a,Sarah,Paternity,2025-08-11,2025-08-15,Paternity leave to support family after childbirth,0,Pending,,
+14,59f13706-927f-4566-b7fa-3a053942fca1,Alice,Sick,2025-08-06,2025-08-08,Medical leave due to illness or health issues,0,Approved,,
+15,00cfc2ba-2198-455e-9369-44768fb93e8e,John,Annual,2025-08-22,2025-08-24,Annual leave for personal rest and travel,0,Pending,,
+16,e06cefd4-4d61-4af5-94de-f6ca9f1742d0,James,Paternity,2025-08-10,2025-08-13,Paternity leave to support family after childbirth,0,Withdrawn,,Family Emergency
+17,ae04f364-503e-471c-a8b9-ae887d1d4b81,Grace,Maternity Leave,2025-08-25,2025-08-29,Maternity leave for child delivery and recovery,0,Withdrawn,,Not Needed Anymore
+18,64e91ade-6f66-4f2e-be78-5dd6bc80ec03,Alice,Paternity,2025-08-20,2025-08-22,Paternity leave to support family after childbirth,0,Rejected,Incomplete Application,
+19,eb6fc8c9-c963-4e09-aac2-552810bcb6c5,Linda,Paternity,2025-08-04,2025-08-09,Paternity leave to support family after childbirth,0,Pending,,
+20,8ce7c20f-acd1-4d04-900d-bf9e84959cbf,Linda,Study Leave,2025-08-13,2025-08-15,Time off granted for academic or exam preparation,0,Approved,,
+21,53ebc615-35fb-4947-a8c0-ca5149a98a32,Alice,Study Leave,2025-08-19,2025-08-22,Time off granted for academic or exam preparation,0,Pending,,
+22,02967ff3-c237-41f3-9747-634a778e07ef,Sarah,Study Leave,2025-08-01,2025-08-02,Time off granted for academic or exam preparation,0,Rejected,Insufficient Leave Balance,
+23,4e52e420-e1a7-422f-9039-eca9552f6d25,Kevin,Paternity,2025-08-20,2025-08-22,Paternity leave to support family after childbirth,0,Pending,,
+24,f425dfad-f34d-4a63-8024-1618431a6c09,John,Compassionate Leave,2025-08-26,2025-08-31,Leave due to loss or critical illness in the family,0,Withdrawn,,Not Needed Anymore
+25,b3803a7e-641b-4038-b1f8-c105fbe2e538,John,Sick,2025-08-09,2025-08-11,Medical leave due to illness or health issues,0,Withdrawn,,Schedule Conflict
+26,03fc894e-6866-4e34-872a-2f37948ecc00,James,Paternity,2025-08-12,2025-08-16,Paternity leave to support family after childbirth,0,Rejected,Outside Policy Scope,
+27,53507939-7914-4a4d-957c-aa6ab8f594bd,Alice,Study Leave,2025-08-16,2025-08-17,Time off granted for academic or exam preparation,0,Rejected,Operational Constraints,
+28,742f517c-b5a9-451b-939f-f03001f96911,Diana,Study Leave,2025-08-18,2025-08-23,Time off granted for academic or exam preparation,0,Rejected,Operational Constraints,
+29,c8778ea9-623c-4416-9ca0-29f44dc7d8a7,Linda,Compassionate Leave,2025-08-01,2025-08-04,Leave due to loss or critical illness in the family,0,Approved,,
+30,e77153b2-814b-4ee1-a4f9-dc8ee5837a14,James,Maternity Leave,2025-08-22,2025-08-26,Maternity leave for child delivery and recovery,0,Approved,,
+31,9842be77-2327-44a7-b8e6-452a0aa9e507,Kevin,Paternity,2025-07-31,2025-08-01,Paternity leave to support family after childbirth,0,Pending,,
+32,7df5ae39-0674-4a7c-9889-71cce85469b7,Alice,Maternity Leave,2025-08-17,2025-08-22,Maternity leave for child delivery and recovery,0,Withdrawn,,Supervisor Requested
+33,3dfc9bb4-a115-433e-81ee-2315ccce8177,Sarah,Compassionate Leave,2025-08-09,2025-08-13,Leave due to loss or critical illness in the family,0,Pending,,
+34,4628d55f-331d-4de2-b66c-cbf01f69c59f,James,Maternity Leave,2025-08-01,2025-08-02,Maternity leave for child delivery and recovery,0,Rejected,Operational Constraints,
+35,6c048491-7f0f-4bb1-a427-a9f612c5e8e4,Brian,Maternity Leave,2025-08-14,2025-08-15,Maternity leave for child delivery and recovery,0,Withdrawn,,Change of Plan
+36,078002b4-9f8f-45a1-8ef8-165e6d2feac9,John,Compassionate Leave,2025-08-06,2025-08-08,Leave due to loss or critical illness in the family,0,Rejected,Insufficient Leave Balance,
+37,750a9042-ee86-4873-9c20-10c110731380,James,Paternity,2025-08-12,2025-08-16,Paternity leave to support family after childbirth,0,Rejected,Operational Constraints,
+38,1da51e1d-d1a7-439c-8dec-99be395616c8,Grace,Annual,2025-08-11,2025-08-14,Annual leave for personal rest and travel,0,Withdrawn,,Supervisor Requested
+39,59bc4a0d-e0ff-4ce0-ba17-f2e6b7ea03df,Sarah,Study Leave,2025-08-11,2025-08-16,Time off granted for academic or exam preparation,0,Withdrawn,,Change of Plan
+40,c06a158f-413b-450c-89f2-1a6bd7b65d63,Alice,Maternity Leave,2025-08-05,2025-08-10,Maternity leave for child delivery and recovery,0,Rejected,Incomplete Application,
+41,8d56001d-824b-4d39-a6d1-8dbd3d6cec18,John,Compassionate Leave,2025-08-22,2025-08-27,Leave due to loss or critical illness in the family,0,Rejected,Incomplete Application,
+42,2d445903-c6c3-444f-9013-ba35d62006b1,Alice,Paternity,2025-08-18,2025-08-19,Paternity leave to support family after childbirth,0,Approved,,
+43,1fadae96-8769-481a-a0fb-d54d77ae96ff,Sarah,Annual,2025-08-25,2025-08-30,Annual leave for personal rest and travel,0,Pending,,
+44,4b0a619c-b954-4dda-8419-b88e0f98d5bf,Linda,Sick,2025-08-23,2025-08-25,Medical leave due to illness or health issues,0,Withdrawn,,Change of Plan
+45,58a80b33-d5ae-4055-a464-7da9560a6e2e,John,Annual,2025-08-21,2025-08-23,Annual leave for personal rest and travel,0,Pending,,
+46,a509aa61-1177-424d-86c2-920834d81307,George,Compassionate Leave,2025-08-21,2025-08-22,Leave due to loss or critical illness in the family,0,Rejected,Incomplete Application,
+47,fb24407f-6754-4674-8193-922150221303,Grace,Compassionate Leave,2025-08-04,2025-08-06,Leave due to loss or critical illness in the family,0,Approved,,
+48,76cc54c6-30ce-4519-9985-9591e0c7e42a,James,Annual,2025-07-29,2025-08-02,Annual leave for personal rest and travel,0,Withdrawn,,Not Needed Anymore
+49,4f9e0cac-192f-47da-b56f-8bc0fc812c56,John,Compassionate Leave,2025-08-10,2025-08-11,Leave due to loss or critical illness in the family,0,Pending,,
+50,8ab5b1c7-bb5e-476a-8038-aafed506a2f2,Brian,Paternity,2025-08-08,2025-08-10,Paternity leave to support family after childbirth,0,Withdrawn,,Change of Plan
+51,c62035d6-51b2-4784-af2d-41090c735946,George,Sick,2025-08-09,2025-08-11,Medical leave due to illness or health issues,0,Approved,,
+52,e4966bb0-505f-4a7a-b0f3-007e1be87c3b,Sarah,Paternity,2025-08-24,2025-08-28,Paternity leave to support family after childbirth,0,Rejected,Incomplete Application,
+53,c98ea1ae-1c90-4426-9d3f-dd834e7d8bd5,John,Sick,2025-08-10,2025-08-15,Medical leave due to illness or health issues,0,Rejected,Invalid Documents,
+54,b03ce36e-8f51-428d-bbfd-a35387be95cb,George,Sick,2025-08-01,2025-08-05,Medical leave due to illness or health issues,0,Rejected,Outside Policy Scope,
+55,08ea82ab-da74-4ca0-9521-e4f5f07fcfa7,Diana,Study Leave,2025-07-29,2025-07-30,Time off granted for academic or exam preparation,0,Pending,,
+56,b4fc4952-1100-4c14-95f5-2e95603b99f5,Sarah,Sick,2025-08-13,2025-08-18,Medical leave due to illness or health issues,0,Withdrawn,,Schedule Conflict
+57,a8661100-5d42-4f89-a6a9-453457be21d2,Linda,Maternity Leave,2025-08-24,2025-08-27,Maternity leave for child delivery and recovery,0,Rejected,Insufficient Leave Balance,
+58,ba6a9fa0-c70e-4e0e-8c7a-5feb9e34a157,George,Annual,2025-08-05,2025-08-06,Annual leave for personal rest and travel,0,Pending,,
+59,6d888b34-be51-4080-a02c-f67d29ee7e4d,George,Maternity Leave,2025-08-07,2025-08-09,Maternity leave for child delivery and recovery,0,Approved,,
+60,bf69a48f-40fa-4136-b5a7-738c65d4a2c1,Sarah,Sick,2025-07-29,2025-08-03,Medical leave due to illness or health issues,0,Withdrawn,,Change of Plan
+61,22f5d3bd-3af6-440d-95fe-145084fd49cc,Brian,Paternity,2025-07-29,2025-07-30,Paternity leave to support family after childbirth,0,Pending,,
+62,993e2578-6d64-4dfc-b23c-9cb9419c99b7,Brian,Paternity,2025-07-31,2025-08-03,Paternity leave to support family after childbirth,0,Pending,,
+63,49890439-0e59-47cc-8284-1bff9eb275c0,George,Maternity Leave,2025-08-27,2025-08-29,Maternity leave for child delivery and recovery,0,Approved,,
+64,e6add6ec-a567-4d3f-bf29-004bae4b9488,James,Paternity,2025-07-29,2025-08-02,Paternity leave to support family after childbirth,0,Rejected,Outside Policy Scope,
+65,55c783fd-5ef5-4a66-8972-3cd4e70909ea,Kevin,Sick,2025-08-22,2025-08-26,Medical leave due to illness or health issues,0,Rejected,Insufficient Leave Balance,
+66,42ab0a0e-1456-426e-9ac0-8a46f36cf05b,George,Paternity,2025-08-16,2025-08-21,Paternity leave to support family after childbirth,0,Withdrawn,,Not Needed Anymore
+67,0c3f7226-6da0-4e2e-89ca-bff5845a9543,George,Annual,2025-08-18,2025-08-23,Annual leave for personal rest and travel,0,Withdrawn,,Family Emergency
+68,98a3f454-b3e5-40bb-8447-6879ad67a032,Diana,Compassionate Leave,2025-08-12,2025-08-13,Leave due to loss or critical illness in the family,0,Approved,,
+69,e4fb7083-bbf4-4f78-9432-8dbf7833e0b5,Grace,Compassionate Leave,2025-08-12,2025-08-15,Leave due to loss or critical illness in the family,0,Withdrawn,,Change of Plan
+70,9739d3a6-a705-4666-a749-7231eb676712,Grace,Compassionate Leave,2025-08-15,2025-08-16,Leave due to loss or critical illness in the family,0,Withdrawn,,Change of Plan
+71,94d46058-acdd-45e1-81cc-4d735d799c35,Kevin,Annual,2025-08-24,2025-08-27,Annual leave for personal rest and travel,0,Withdrawn,,Change of Plan
+72,961713dd-3227-4137-8665-77a533b9500a,Diana,Paternity,2025-08-09,2025-08-14,Paternity leave to support family after childbirth,0,Rejected,Incomplete Application,
+73,dfe01615-57fc-4286-8e76-236bdd9e0c52,Alice,Paternity,2025-08-04,2025-08-08,Paternity leave to support family after childbirth,0,Withdrawn,,Change of Plan
+74,4e518566-1518-423a-b155-2d62df13cbea,John,Annual,2025-07-31,2025-08-03,Annual leave for personal rest and travel,0,Rejected,Incomplete Application,
+75,0aecff4b-58d0-4f95-99bf-dfb22e830cf9,John,Sick,2025-08-01,2025-08-02,Medical leave due to illness or health issues,0,Rejected,Invalid Documents,
+76,bdfd12ab-15b3-4e8f-8343-feee8875c895,Grace,Sick,2025-08-27,2025-08-29,Medical leave due to illness or health issues,0,Rejected,Insufficient Leave Balance,
+77,8cde2cbf-72f9-4b53-aec9-2a9e3d2d3ae3,Brian,Sick,2025-08-15,2025-08-19,Medical leave due to illness or health issues,0,Rejected,Operational Constraints,
+78,c336eae4-63a3-49d6-9219-541cc707a0e2,Kevin,Paternity,2025-07-31,2025-08-01,Paternity leave to support family after childbirth,0,Rejected,Operational Constraints,
+79,4e87a1a8-60fa-421b-80eb-3edb4d168915,Sarah,Compassionate Leave,2025-08-03,2025-08-04,Leave due to loss or critical illness in the family,0,Approved,,
+80,539d3dbc-c7d2-4ea8-a000-a7dce0bcc91e,George,Paternity,2025-08-02,2025-08-03,Paternity leave to support family after childbirth,0,Pending,,
+81,8aa98d95-2fe5-4455-9155-7cb7854a02d5,Diana,Annual,2025-08-05,2025-08-08,Annual leave for personal rest and travel,0,Pending,,
+82,772d71e6-8fe6-46e4-9a29-794ddfcf9a8c,Sarah,Sick,2025-08-13,2025-08-14,Medical leave due to illness or health issues,0,Withdrawn,,Family Emergency
+83,5e0f56a0-7561-4064-aa3e-6eee51f6f05f,George,Sick,2025-08-17,2025-08-18,Medical leave due to illness or health issues,0,Pending,,
+84,143e1a84-31f0-4b77-8c02-a1bd58edc4e9,Alice,Maternity Leave,2025-08-05,2025-08-06,Maternity leave for child delivery and recovery,0,Approved,,
+85,574c9ca3-8e05-4d3a-b0e5-d9ac06847350,Brian,Compassionate Leave,2025-08-16,2025-08-17,Leave due to loss or critical illness in the family,0,Rejected,Operational Constraints,
+86,79b191e4-be9c-422a-b68b-b5200d53851d,Alice,Annual,2025-08-26,2025-08-29,Annual leave for personal rest and travel,0,Withdrawn,,Schedule Conflict
+87,b7fc64ba-6495-4502-9745-e0de990e54f0,Linda,Study Leave,2025-08-19,2025-08-20,Time off granted for academic or exam preparation,0,Rejected,Invalid Documents,
+88,db71589c-3f46-4198-a1bf-4b4394e02fac,George,Sick,2025-08-08,2025-08-13,Medical leave due to illness or health issues,0,Pending,,
+89,3df2d79a-b252-4101-b1c1-7ec42a5cff1b,Diana,Sick,2025-07-29,2025-08-01,Medical leave due to illness or health issues,0,Rejected,Insufficient Leave Balance,
+90,0dd26fd9-5109-4dcd-bec1-11cebd673393,Brian,Study Leave,2025-08-12,2025-08-17,Time off granted for academic or exam preparation,0,Approved,,
+91,362a82d8-a91d-4072-a818-84363f62f62f,Alice,Study Leave,2025-08-25,2025-08-28,Time off granted for academic or exam preparation,0,Pending,,
+92,5c498286-ae62-4278-b24f-55f6560b6ed7,Kevin,Maternity Leave,2025-08-24,2025-08-25,Maternity leave for child delivery and recovery,0,Pending,,
+93,20ea2ece-2cb8-46a8-889e-a624bbd24d0e,Alice,Paternity,2025-07-30,2025-08-01,Paternity leave to support family after childbirth,0,Approved,,
+94,00c6c8c3-fafb-48f6-bb31-58093a2cb5cd,John,Compassionate Leave,2025-08-09,2025-08-10,Leave due to loss or critical illness in the family,0,Rejected,Outside Policy Scope,
+95,d47d5c9b-8ab4-4b2f-8916-b04f6256a34c,Grace,Annual,2025-08-13,2025-08-17,Annual leave for personal rest and travel,0,Rejected,Insufficient Leave Balance,
+96,da58e25c-736d-4055-8ab1-3db5b53062e4,Grace,Maternity Leave,2025-08-06,2025-08-11,Maternity leave for child delivery and recovery,0,Rejected,Operational Constraints,
+97,75b5198b-e863-420f-975d-c7bced4f27d2,Kevin,Study Leave,2025-08-03,2025-08-07,Time off granted for academic or exam preparation,0,Withdrawn,,Schedule Conflict
+98,b8dd9d6d-c72c-420e-8bd1-1edd86d7608a,Sarah,Sick,2025-08-22,2025-08-26,Medical leave due to illness or health issues,0,Approved,,
+99,1562da25-a667-4c3b-9e1b-14e0317b84a8,Sarah,Compassionate Leave,2025-08-24,2025-08-28,Leave due to loss or critical illness in the family,0,Approved,,
+100,576031be-6bda-4295-9d48-d624086e84d3,Alice,Annual,2025-08-06,2025-08-09,Annual leave for personal rest and travel,0,Withdrawn,,Schedule Conflict
