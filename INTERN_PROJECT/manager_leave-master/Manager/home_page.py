@@ -164,7 +164,7 @@ def get_all_pending_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
@@ -187,7 +187,7 @@ def get_approved_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll'
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
@@ -251,7 +251,7 @@ def update_leave_status(leave_request_id, new_status, reason=""):
     if conn:
         try:
             cursor = conn.cursor()
-            update_sql = "UPDATE off_roll SET status = ?"
+            update_sql = "UPDATE leave_entries SET status = ?"
             params = [new_status]
 
             if new_status == "Declined":
