@@ -56,7 +56,6 @@ def get_data_from_db():
             )
         ''')
         conn.commit()
-        conn.close()
         
         # Fetch employee/partner data
         employee_query = """
