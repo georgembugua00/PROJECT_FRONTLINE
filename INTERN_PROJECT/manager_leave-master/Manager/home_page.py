@@ -5,7 +5,7 @@ import pandas as pd # Still useful for DataFrame conversion
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "../fap.db"
+DB_NAME = "leave_management"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -30,7 +30,7 @@ def create_tables():
 
             # 1. Create employee_table_rows
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "employee_table_rows" (
+                CREATE TABLE IF NOT EXISTS "employee_table" (
                     "Username"	INTEGER,
                     "First_Name"	TEXT,
                     "Middle_Name"	TEXT,
@@ -62,8 +62,8 @@ def create_tables():
             # is managing 'off_roll' entries. If you truly have a table named 'leave' for this view,
             # please provide its exact schema.
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "off_roll" (
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+                CREATE TABLE IF NOT EXISTS "leave_entries" (
+                    "leave_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
                     "employee_id"   TEXT NOT NULL, -- Links to employee_table_rows.uuid
                     "employee_name"	TEXT NOT NULL,
                     "leave_type"	TEXT NOT NULL,
