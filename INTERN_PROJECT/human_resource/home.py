@@ -41,6 +41,21 @@ def get_data_from_db():
                     "position"	TEXT
                 );
             """)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS leave_entries (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                employee_name TEXT NOT NULL,
+                leave_type TEXT NOT NULL,
+                start_date TEXT NOT NULL, -- Changed to TEXT for ISO format
+                end_date TEXT NOT NULL,   -- Changed to TEXT for ISO format
+                description TEXT,
+                attachment BOOLEAN,
+                status TEXT NOT NULL,
+                decline_reason TEXT,
+                recall_reason TEXT
+            )
+        ''')
+        conn.        
         
         # Fetch employee/partner data
         employee_query = """
