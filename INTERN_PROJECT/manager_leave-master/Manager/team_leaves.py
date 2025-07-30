@@ -9,7 +9,7 @@ import pandas as pd
 
 # --- SQLite Database Configuration ---
 # Ensure this path is correct and accessible by your Streamlit app
-DB_NAME = "/Users/danielwanganga/Documents/Airtel_AI/leave_management.db"
+DB_NAME = "leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -34,7 +34,7 @@ def create_tables():
 
             # 1. Create employee_table_rows
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "employee_table_rows" (
+                CREATE TABLE IF NOT EXISTS "employee_table" (
                     "Username"	INTEGER,
                     "First_Name"	TEXT,
                     "Middle_Name"	TEXT,
@@ -66,8 +66,8 @@ def create_tables():
             # is managing 'off_roll' entries. If you truly have a table named 'leave' for this view,
             # please provide its exact schema.
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "off_roll" (
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+                CREATE TABLE IF NOT EXISTS "leave_entries" (
+                    "leave_id"	INTEGER PRIMARY KEY AUTOINCREMENT,
                     "employee_id"   TEXT NOT NULL, -- Links to employee_table_rows.uuid
                     "employee_name"	TEXT NOT NULL,
                     "leave_type"	TEXT NOT NULL,
@@ -106,7 +106,7 @@ create_tables()
 # --- Employee Data Retrieval Functions ---
 
 def get_employee_by_id(employee_uuid):
-    """Fetches employee details by UUID from employee_table_rows."""
+    """Fetches employee details by UUID from employee_table"""
     conn = init_db()
     if conn:
         try:
@@ -124,7 +124,7 @@ def get_employee_by_id(employee_uuid):
     return None
 
 def get_employee_by_name(employee_name):
-    """Fetches employee details by First_Name from employee_table_rows."""
+    """Fetches employee details by First_Name from employee_table"""
     conn = init_db()
     if conn:
         try:
@@ -168,7 +168,7 @@ def get_all_pending_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
@@ -191,7 +191,7 @@ def get_approved_leaves():
             cursor = conn.cursor()
             # Changed 'leave' to 'off_roll'
             cursor.execute("""
-                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
                 FROM leave_entries
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
@@ -217,7 +217,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
+            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
             params = []
 
             if status_filter:
