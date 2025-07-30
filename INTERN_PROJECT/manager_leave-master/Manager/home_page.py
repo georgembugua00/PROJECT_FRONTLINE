@@ -1,10 +1,7 @@
 import streamlit as st
 from datetime import date, timedelta, datetime
 import sqlite3
-import pandas as pd # Still useful for DataFrame conversion
-
 import pandas as pd
-import sqlite3
 import os
 
 # Get the base directory where this script is located
@@ -14,16 +11,13 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(base_dir)
 
 # Build the path to leave_management.db
-db_path = os.path.join(project_dir, 'leave_management.db')#print(leave_entitlement)
-
-# --- SQLite Database Configuration ---
-# Ensure this path is correct and accessible by your Streamlit app
-#DB_NAME = "leave_management.db"
+DB_NAME = os.path.join(project_dir, 'leave_management.db')
+#DB_PATH = "/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(DB_NAME)
         conn.row_factory = sqlite3.Row  # This allows accessing columns by name (e.g., row['column_name'])
         return conn
     except sqlite3.Error as e:
@@ -88,16 +82,15 @@ def get_all_employees_from_db():
 # --- Leave Application Management Functions (for Manager) ---
 
 def get_all_pending_leaves():
-    """Fetches all pending leave requests from the 'off_roll' table."""
+    """Fetches all pending leave requests from the 'leave_entries' table."""
     conn = init_db()
     pending_leaves = []
     if conn:
         try:
             cursor = conn.cursor()
-            # Changed 'leave' to 'off_roll' for consistency with employee_leave.py
             cursor.execute("""
-                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entry
+                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                FROM leave_entries
                 WHERE status = 'Pending'
                 ORDER BY start_date ASC
             """)
@@ -111,16 +104,15 @@ def get_all_pending_leaves():
     return []
 
 def get_approved_leaves():
-    """Fetches all approved leave requests from the 'off_roll' table."""
+    """Fetches all approved leave requests from the 'leave_entries' table."""
     conn = init_db()
     approved_leaves = []
     if conn:
         try:
             cursor = conn.cursor()
-            # Changed 'leave' to 'off_roll'
             cursor.execute("""
-                SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status
-                FROM leave_entry
+                SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status
+                FROM leave_entries
                 WHERE status = 'Approved'
                 ORDER BY start_date ASC
             """)
@@ -145,7 +137,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     if conn:
         try:
             cursor = conn.cursor()
-            query_sql = "SELECT leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entry WHERE 1=1"
+            query_sql = "SELECT id, leave_id, employee_name, leave_type, start_date, end_date, description, status, decline_reason, recall_reason FROM leave_entries WHERE 1=1"
             params = []
 
             if status_filter:
@@ -175,7 +167,7 @@ def get_team_leaves(status_filter=None, leave_type_filter=None, employee_filter=
     return []
 
 def update_leave_status(leave_request_id, new_status, reason=""):
-    """Updates the status of a leave request in 'off_roll' table."""
+    """Updates the status of a leave request in 'leave_entries' table."""
     if not leave_request_id:
         return False, "Invalid leave ID"
         
@@ -183,19 +175,27 @@ def update_leave_status(leave_request_id, new_status, reason=""):
     if conn:
         try:
             cursor = conn.cursor()
-            update_sql = "UPDATE leave_entry SET status = ?"
+            
+            # First, check if the record exists
+            cursor.execute("SELECT id FROM leave_entries WHERE id = ?", (leave_request_id,))
+            existing_record = cursor.fetchone()
+            
+            if not existing_record:
+                return False, f"Leave request with ID {leave_request_id} not found."
+            
+            update_sql = "UPDATE leave_entries SET status = ?"
             params = [new_status]
 
             if new_status == "Declined":
-                update_sql += ", decline_reason = ?, recall_reason = ''" # Clear recall reason
+                update_sql += ", decline_reason = ?, recall_reason = NULL"
                 params.append(reason)
             elif new_status == "Recalled":
-                update_sql += ", recall_reason = ?, decline_reason = ''" # Clear decline reason
+                update_sql += ", recall_reason = ?, decline_reason = NULL"
                 params.append(reason)
-            elif new_status == "Approved": # Clear both reasons if approved
-                update_sql += ", decline_reason = '', recall_reason = ''"
+            elif new_status == "Approved":
+                update_sql += ", decline_reason = NULL, recall_reason = NULL"
             
-            update_sql += " WHERE id = ?" # Use 'id' as the primary key of 'off_roll'
+            update_sql += " WHERE id = ?"
             params.append(leave_request_id)
 
             cursor.execute(update_sql, tuple(params))
@@ -204,14 +204,14 @@ def update_leave_status(leave_request_id, new_status, reason=""):
             if cursor.rowcount > 0:
                 return True, f"Leave status updated to {new_status}"
             else:
-                return False, "Failed to update leave status (leave request not found)."
+                return False, "Failed to update leave status (no rows affected)."
         except sqlite3.Error as e:
             return False, f"Error updating leave status: {str(e)}"
         finally:
             conn.close()
     return False, "Database connection failed."
 
-# --- Leave Policies & UI elements (No changes needed if these are just display) ---
+# --- Leave Policies & UI elements ---
 LEAVE_TYPE_MAPPING = {
     "Annual": "annual_leave",
     "Sick": "sick_leave",
@@ -224,8 +224,6 @@ LEAVE_TYPE_MAPPING = {
 }
 
 st.set_page_config(layout="wide")
-
-
 
 # --- UI Header ---
 st.html("""
@@ -297,7 +295,9 @@ def pending_leaves_view():
         return
 
     for leave in pending_leaves:
-        employee_id_for_ui = leave["id"] # This is the 'id' from the off_roll table
+        # Use the primary key 'id' for database operations
+        leave_primary_id = leave["id"]
+        leave_id_display = leave["leave_id"]  # For display purposes
         employee_name = leave["employee_name"]
         leave_type = leave["leave_type"]
         start_date = leave["start_date"]
@@ -306,37 +306,52 @@ def pending_leaves_view():
 
         with st.expander(f"Request from {employee_name} ({leave_type}) - {start_date} to {end_date}", expanded=True):
             st.write(f"**Employee:** {employee_name}")
+            st.write(f"**Leave ID:** {leave_id_display}")
             st.write(f"**Leave Type:** {leave_type}")
             st.write(f"**Dates:** {start_date} to {end_date}")
             st.write(f"**Reason:** {description if description else 'No description provided.'}")
 
             col1, col2 = st.columns([1, 1])
             with col1:
-                if st.button("✅ Approve", key=f"approve_{employee_id_for_ui}"):
-                    update_leave_status(employee_id_for_ui, "Approved")
-                    st.success(f"Leave for {employee_name} approved.")
-                    st.rerun()
+                if st.button("✅ Approve", key=f"approve_{leave_primary_id}"):
+                    success, message = update_leave_status(leave_primary_id, "Approved")
+                    if success:
+                        st.success(f"Leave for {employee_name} approved.")
+                        st.rerun()
+                    else:
+                        st.error(f"Failed to approve leave: {message}")
+            
             with col2:
-                # Toggle visibility of the decline reason input
-                if f"show_reason_{employee_id_for_ui}" not in st.session_state:
-                    st.session_state[f"show_reason_{employee_id_for_ui}"] = False
+                # Use session state to manage decline reason input visibility
+                decline_key = f"show_decline_{leave_primary_id}"
+                if decline_key not in st.session_state:
+                    st.session_state[decline_key] = False
                 
-                if st.button("❌ Decline", key=f"decline_{employee_id_for_ui}"):
-                    st.session_state[f"show_reason_{employee_id_for_ui}"] = not st.session_state[f"show_reason_{employee_id_for_ui}"]
-                    # If button is clicked to hide, don't show the input immediately
-                    if not st.session_state[f"show_reason_{employee_id_for_ui}"]:
-                        st.rerun() # Rerun to remove the text input
+                if st.button("❌ Decline", key=f"decline_btn_{leave_primary_id}"):
+                    st.session_state[decline_key] = True
+                    st.rerun()
                 
-                if st.session_state[f"show_reason_{employee_id_for_ui}"]:
-                    decline_reason = st.text_input("Reason for declining:", key=f"reason_{employee_id_for_ui}")
-                    if st.button("Confirm Decline", key=f"confirm_decline_{employee_id_for_ui}"):
-                        if decline_reason:
-                            update_leave_status(employee_id_for_ui, "Declined", reason=decline_reason)
-                            st.error(f"Leave for {employee_name} declined.")
+                if st.session_state.get(decline_key, False):
+                    decline_reason = st.text_input("Reason for declining:", key=f"decline_reason_{leave_primary_id}")
+                    
+                    col_confirm, col_cancel = st.columns([1, 1])
+                    with col_confirm:
+                        if st.button("Confirm Decline", key=f"confirm_decline_{leave_primary_id}"):
+                            if decline_reason.strip():
+                                success, message = update_leave_status(leave_primary_id, "Declined", reason=decline_reason)
+                                if success:
+                                    st.error(f"Leave for {employee_name} declined.")
+                                    st.session_state[decline_key] = False  # Reset state
+                                    st.rerun()
+                                else:
+                                    st.error(f"Failed to decline leave: {message}")
+                            else:
+                                st.warning("A reason is required to decline a request.")
+                    
+                    with col_cancel:
+                        if st.button("Cancel", key=f"cancel_decline_{leave_primary_id}"):
+                            st.session_state[decline_key] = False
                             st.rerun()
-                        else:
-                            st.warning("A reason is required to decline a request.")
-
 
 def approved_leaves_for_recall_view():
     st.header("Approved Leaves (for Recall)")
@@ -347,7 +362,9 @@ def approved_leaves_for_recall_view():
         return
 
     for leave in approved_leaves:
-        leave_id = leave["id"] # This is the 'id' from the off_roll table
+        # Use the primary key 'id' for database operations
+        leave_primary_id = leave["id"]
+        leave_id_display = leave["leave_id"]
         employee_name = leave["employee_name"]
         leave_type = leave["leave_type"]
         start_date_str = leave["start_date"]
@@ -359,7 +376,7 @@ def approved_leaves_for_recall_view():
             start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
             end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
         except ValueError:
-            st.error(f"⚠️ Invalid date format in leave ID {leave_id} for {employee_name}: {start_date_str} to {end_date_str}")
+            st.error(f"⚠️ Invalid date format in leave ID {leave_id_display} for {employee_name}: {start_date_str} to {end_date_str}")
             continue
 
         today = date.today()
@@ -374,21 +391,42 @@ def approved_leaves_for_recall_view():
 
         with st.expander(f"Approved Leave for {employee_name} ({leave_type}) - {start_date_str} to {end_date_str}", expanded=True):
             st.write(f"**Employee:** {employee_name}")
+            st.write(f"**Leave ID:** {leave_id_display}")
             st.write(f"**Leave Type:** {leave_type}")
             st.write(f"**Dates:** {start_date_str} to {end_date_str}")
             st.write(f"**Reason:** {description if description else 'No description provided.'}")
             st.write(f"**Days Remaining:** {days_left}")
 
-            if st.button("↩️ Recall Leave", key=f"recall_{leave_id}"):
-                # The original logic checks if days_left > 3 before allowing recall.
-                # You might want to adjust this policy.
-                if days_left > 3:
-                    recall_reason = "Operational Need" # You might want a text input for this too
-                    update_leave_status(leave_id, "Recalled", reason=recall_reason)
-                    st.warning(f"Leave for {employee_name} has been recalled due to {recall_reason}.")
-                    st.rerun()
-                else:
-                    st.error(f"Cannot recall leave for {employee_name}. Less than 3 days ({days_left} days) remaining or leave has ended.")
+            # Use session state to manage recall reason input
+            recall_key = f"show_recall_{leave_primary_id}"
+            if recall_key not in st.session_state:
+                st.session_state[recall_key] = False
+            
+            if st.button("↩️ Recall Leave", key=f"recall_btn_{leave_primary_id}"):
+                st.session_state[recall_key] = True
+                st.rerun()
+            
+            if st.session_state.get(recall_key, False):
+                recall_reason = st.text_input("Reason for recall:", value="Operational Need", key=f"recall_reason_{leave_primary_id}")
+                
+                col_confirm, col_cancel = st.columns([1, 1])
+                with col_confirm:
+                    if st.button("Confirm Recall", key=f"confirm_recall_{leave_primary_id}"):
+                        if days_left > 3:
+                            success, message = update_leave_status(leave_primary_id, "Recalled", reason=recall_reason)
+                            if success:
+                                st.warning(f"Leave for {employee_name} has been recalled due to {recall_reason}.")
+                                st.session_state[recall_key] = False  # Reset state
+                                st.rerun()
+                            else:
+                                st.error(f"Failed to recall leave: {message}")
+                        else:
+                            st.error(f"Cannot recall leave for {employee_name}. Less than 3 days ({days_left} days) remaining or leave has ended.")
+                
+                with col_cancel:
+                    if st.button("Cancel", key=f"cancel_recall_{leave_primary_id}"):
+                        st.session_state[recall_key] = False
+                        st.rerun()
 
 def team_leaves_dashboard_view():
     st.header("Team Leave Dashboard")
@@ -401,7 +439,7 @@ def team_leaves_dashboard_view():
     with col2:
         selected_status = st.multiselect("Filter by Status", ["Pending", "Approved", "Declined", "Withdrawn", "Recalled"], default=["Pending", "Approved"])
     with col3:
-        all_leave_types = list(LEAVE_TYPE_MAPPING.keys()) # Get keys from mapping for consistency
+        all_leave_types = list(LEAVE_TYPE_MAPPING.keys())
         selected_leave_type = st.multiselect("Filter by Leave Type", all_leave_types)
 
     filtered_leaves = get_team_leaves(
@@ -418,6 +456,7 @@ def team_leaves_dashboard_view():
     leave_data = []
     for leave in filtered_leaves:
         leave_data.append({
+            "Leave ID": leave["leave_id"],
             "Employee": leave["employee_name"],
             "Leave Type": leave["leave_type"],
             "Start Date": leave["start_date"],
@@ -425,11 +464,10 @@ def team_leaves_dashboard_view():
             "Status": leave["status"],
             "Description": leave["description"] if leave["description"] else "N/A",
             "Decline Reason": leave["decline_reason"] if leave["decline_reason"] else "N/A",
-            "Recall Reason": leave["recall_reason"] if leave["recall_reason"] else "N/A" # Added recall reason
+            "Recall Reason": leave["recall_reason"] if leave["recall_reason"] else "N/A"
         })
 
     # Display results in a table for better readability
-    # Convert to DataFrame for better display features in Streamlit
     df = pd.DataFrame(leave_data)
     st.dataframe(df, use_container_width=True)
 
