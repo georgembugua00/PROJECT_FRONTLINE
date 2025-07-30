@@ -14,6 +14,8 @@ def get_data_from_db():
         # Connect to SQLite database
         conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
                     # 1. Create employee_table_rows (formerly employee_table)
+
+        cursor = conn.cursor()
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS "employee_table" (
                     "Username"	INTEGER,
