@@ -73,7 +73,7 @@ def get_data_from_db():
             e.Department
         FROM leave_entries l
         LEFT JOIN employee_table e ON l.leave_id = e.id
-        ORDER BY l.id DESC
+        ORDER BY l.leave_id DESC
         """
         leave_data = pd.read_sql_query(leave_query, conn)
         

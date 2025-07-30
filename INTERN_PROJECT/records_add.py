@@ -11,3 +11,13 @@ employee_data.to_sql(name="employee_table",con=conn,if_exists='replace',index=Fa
 leave_entry_data.to_sql(name="leave_entry",con=conn,if_exists='replace',index=False)
 leave_entitlements_data.to_sql(name="leave_entitlements_data",con=conn,if_exists='replace',index=False)
 
+table_names = conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+print(table_names)
+
+leave_entitlement = conn.execute(("SELECT * FROM leave_entitlements_data")).fetchall()
+
+leave_entry = conn.execute(("SELECT * FROM leave_entry")).fetchall()
+
+print(leave_entry)
+
+#print(leave_entitlement)
