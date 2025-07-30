@@ -42,7 +42,7 @@ leave_entitlement = conn.execute(("SELECT * FROM leave_entitlements_data")).fetc
 
 leave_entry = conn.execute(("SELECT * FROM leave_entry")).fetchall()
 
-print(leave_entry)
+#print(leave_entry)
 
 # Database connection function
 @st.cache_data
@@ -50,7 +50,7 @@ def get_data_from_db():
     """Fetch all data from SQLite database"""
     try:
         # Connect to SQLite database
-        conn = sqlite3.connect("leave_management.db")  # Update with your actual database name
+        conn = sqlite3.connect(db_path)# Update with your actual database name
                     # 1. Create employee_table_rows (formerly employee_table)
 
 
@@ -62,6 +62,8 @@ def get_data_from_db():
         """
         data = pd.read_sql_query(employee_query, conn)
         
+        print(data['Partner_Name'])
+        
         # Fetch leave data
         leave_query = """
         SELECT 
@@ -70,8 +72,8 @@ def get_data_from_db():
             e.Partner_Name,
             e.Department
         FROM leave_entry l
-        LEFT JOIN employee_table e ON l.leave_id = e.id
-        ORDER BY l.leave_id DESC
+        LEFT JOIN employee_table e ON l.id = e.id
+        ORDER BY l.id DESC
         """
         leave_data = pd.read_sql_query(leave_query, conn)
         
