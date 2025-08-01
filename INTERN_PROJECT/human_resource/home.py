@@ -25,22 +25,9 @@ leave_entry_path = os.path.join(project_dir, 'data/leave_entries.csv')
 # Build the path to leave_management.db
 leave_entitlements_path = os.path.join(project_dir, 'data/leave_entitlements_data.csv')
 
+db = "/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db"
 # Connect to the database
-conn = sqlite3.connect(db_path)
-employee_data = pd.read_csv(employee_table_path)
-leave_entry_data = pd.read_csv(leave_entry_path)
-leave_entitlements_data = pd.read_csv(leave_entitlements_path)
 
-employee_data.to_sql(name="employee_table",con=conn,if_exists='replace',index=False)
-leave_entry_data.to_sql(name="leave_entry",con=conn,if_exists='replace',index=False)
-leave_entitlements_data.to_sql(name="leave_entitlements_data",con=conn,if_exists='replace',index=False)
-
-table_names = conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
-print(table_names)
-
-leave_entitlement = conn.execute(("SELECT * FROM leave_entitlements_data")).fetchall()
-
-leave_entry = conn.execute(("SELECT * FROM leave_entry")).fetchall()
 
 #print(leave_entry)
 
@@ -62,18 +49,13 @@ def get_data_from_db():
         """
         data = pd.read_sql_query(employee_query, conn)
         
-        print(data['Partner_Name'])
+        print(data.columns)
         
         # Fetch leave data
         leave_query = """
         SELECT 
-            l.*,
-            e.First_Name as employee_name,
-            e.Partner_Name,
-            e.Department
-        FROM leave_entry l
-        LEFT JOIN employee_table e ON l.id = e.id
-        ORDER BY l.id DESC
+            *
+        FROM leave_entries;
         """
         leave_data = pd.read_sql_query(leave_query, conn)
         
@@ -96,7 +78,7 @@ st.title("Frontline Agent Program")
 
 # Partner filter for dynamic metrics
 if 'Partner' in data.columns:
-    partner_column = 'Partner'
+    partner_column = 'Partner_Name'
 elif 'partner' in data.columns:
     partner_column = 'partner'
 else:

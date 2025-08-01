@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # Database file path
-DATABASE_PATH = "leave_management.db"
+DATABASE_PATH = "/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db"
 
 # Initialize SQLite database
     
@@ -26,7 +26,27 @@ def get_db_connection():
     return sqlite3.connect(DATABASE_PATH)
 
 def authenticate_user(email, password):
-    """Authenticate user with email and password from employee_table."""
+    """Authenticate user with hardcoded credentials or database lookup."""
+    # Hardcoded credentials
+    valid_credentials = {
+        "23188032": "password123",
+        "23132088": "password123"
+    }
+    
+    # Check hardcoded credentials first
+    if email in valid_credentials and password == valid_credentials[email]:
+        # Return mock user data for hardcoded credentials
+        return {
+            'uuid': email,
+            'AUUID': email,
+            'First_Name': 'Agent' if email == "23188032" else 'Support',
+            'Surname_Name': 'User' if email == "23188032" else 'Staff',
+            'Email': email,
+            'Sub_Department': 'Frontline',
+            'password': password
+        }
+    
+    # Fallback to database authentication
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -421,12 +441,15 @@ def simple_login_page():
     st.title("🔐 Frontline Agent Portal")
     st.markdown("### Please sign in to continue")
     
+    # Add login instructions
+    st.info("**Login Credentials:**\n- Username: `23188032` or `23132088`\n- Password: `password123`")
+    
     with st.form("login_form"):
         col1, col2, col3 = st.columns([1, 2, 1])
         
         with col2:
-            email = st.text_input("📧 Email", placeholder="Enter your email address")
-            password = st.text_input("🔒 Password", type="password", placeholder="Enter your password")
+            email = st.text_input("👤 Username", placeholder="Enter 23188032 or 23132088")
+            password = st.text_input("🔒 Password", type="password", placeholder="Enter password123")
             
             login_button = st.form_submit_button("Sign In", use_container_width=True)
     
@@ -446,9 +469,9 @@ def simple_login_page():
                     st.success(f"Welcome back, {st.session_state.full_name}!")
                     st.rerun()
                 else:
-                    st.error("❌ Invalid email or password. Please try again.")
+                    st.error("❌ Invalid username or password. Please try again.")
         else:
-            st.warning("⚠️ Please enter both email and password.")
+            st.warning("⚠️ Please enter both username and password.")
 
 # ========== MAIN APPLICATION LOGIC ==========
 # Initialize session state

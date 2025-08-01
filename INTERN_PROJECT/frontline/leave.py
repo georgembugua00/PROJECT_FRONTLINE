@@ -3,7 +3,7 @@ import sqlite3
 from datetime import date, timedelta, datetime
 
 # --- SQLite Database Configuration ---
-DB_NAME = "INTERN_PROJECT/leave_management.db"
+DB_NAME = "/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db"
 
 def init_db():
     """Initializes and returns a connection to the SQLite database."""
@@ -14,84 +14,6 @@ def init_db():
     except sqlite3.Error as e:
         st.error(f"Error connecting to database: {e}")
         return None
-
-def create_tables():
-    """
-    Creates necessary tables if they don't exist based on the provided schemas.
-    IMPORTANT: Added 'status' column to 'leave' table and adjusted
-    'decline_reason'/'recall_reason' to default to empty string, as they are NOT NULL.
-    """
-    conn = init_db()
-    if conn:
-        try:
-            cursor = conn.cursor()
-
-            # 1. Create employee_table_rows (formerly employee_table)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "employee_table_rows" (
-                    "Username"	INTEGER,
-                    "First_Name"	TEXT,
-                    "Middle_Name"	TEXT,
-                    "Surname_Name"	TEXT,
-                    "AUUID"	INTEGER,
-                    "Employee_ID"	INTEGER,
-                    "Email"	TEXT,
-                    "Manager"	TEXT,
-                    "Date_of_Join"	TEXT,
-                    "OPCO_Region"	TEXT,
-                    "Organization"	TEXT,
-                    "Department"	TEXT,
-                    "Sub_Department"	TEXT,
-                    "Person_Type"	TEXT,
-                    "Personal_Mobile"	INTEGER,
-                    "Partner_Name"	TEXT,
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-                    "uuid"	TEXT UNIQUE, -- Assuming 'uuid' is the unique identifier for external linking
-                    "gender"	TEXT,
-                    "password"	TEXT,
-                    "position"	TEXT
-                );
-            """)
-
-            # 2. Create leave (formerly leave_leave)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "leave" (
-                    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-                    "employee_id"   TEXT NOT NULL, -- Links to employee_table_rows.uuid
-                    "employee_name"	TEXT NOT NULL,
-                    "leave_type"	TEXT NOT NULL,
-                    "start_date"	TEXT NOT NULL,
-                    "end_date"	TEXT NOT NULL,
-                    "description"	TEXT, -- Your schema had NOT NULL, but it's often nullable. If NOT NULL is strict, change to TEXT NOT NULL.
-                    "attachment"	INTEGER DEFAULT 0, -- BOOLEAN is INTEGER in SQLite (0 or 1)
-                    "status"    TEXT DEFAULT 'Pending', -- CRITICAL ADDITION: Was missing from your provided 'leave' schema
-                    "decline_reason"	TEXT DEFAULT '', -- Your schema was NOT NULL; using default empty string
-                    "recall_reason"	TEXT DEFAULT '', -- Your schema was NOT NULL; using default empty string
-                    FOREIGN KEY ("employee_id") REFERENCES "employee_table_rows"("uuid")
-                );
-            """)
-
-            # 3. Create leave_entitlements
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS "leave_entitlements (1)" (
-                    "employee_id"	TEXT PRIMARY KEY, -- Links to employee_table_rows.uuid
-                    "annual_leave"	INTEGER NOT NULL,
-                    "sick_leave"	INTEGER NOT NULL,
-                    "compensation_leave"	INTEGER NOT NULL,
-                    "maternity_leave_days"	INTEGER NOT NULL,
-                    "paternity_leave_days"	INTEGER NOT NULL,
-                    FOREIGN KEY("employee_id") REFERENCES "employee_table_rows"("uuid")
-                );
-            """)
-            conn.commit()
-            # st.success("Database tables created or already exist.") # Only for debugging setup
-        except sqlite3.Error as e:
-            st.error(f"Error creating tables: {e}")
-        finally:
-            conn.close()
-
-# Call create_tables once when the application starts
-create_tables()
 
 # --- CRUD Operations (SQLite3 versions) ---
 
@@ -346,10 +268,10 @@ if not st.session_state.get('logged_in', False):
     st.stop()
 
 # Get current user information from session state (set by main.py after SSO login)
-logged_in_user_id = st.session_state.get('user_id')  # This is the AUUID from employee_table_rows
-logged_in_full_name = st.session_state.get('full_name')
-logged_in_username = st.session_state.get('username')  # Email
-logged_in_user_role = st.session_state.get('user_role')  # Sub_Department
+logged_in_user_id = st.session_state = 23188032# This is the AUUID from employee_table_rows
+logged_in_full_name = st.session_state = "George Mbugua"
+logged_in_username = st.session_state = "23188032"  # Email
+logged_in_user_role = st.session_state = "CSE"  # Sub_Department
 
 # Verify user exists in database
 if logged_in_user_id:

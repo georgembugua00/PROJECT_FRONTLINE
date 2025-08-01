@@ -4,7 +4,7 @@ import sqlite3
 from datetime import date, datetime
 
 # Define the path to your SQLite database
-DB_PATH = 'leave_management.db'
+DB_PATH = '/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/leave_management.db'
 
 def init_db():
     """

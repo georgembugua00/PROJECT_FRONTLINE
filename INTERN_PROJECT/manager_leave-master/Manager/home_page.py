@@ -332,7 +332,7 @@ st.html("""
         border-bottom: 2px solid #e5e7eb;
     }
     .alert-pending {
-        background-color: #F1C232;
+        background-color: #DBA500;
         border-left: 4px solid #f59e0b;
         padding: 1rem;
         border-radius: 8px;

@@ -35,7 +35,7 @@ def initialize_rag_system():
     )
     
     # Load Data 
-    loader = PDFPlumberLoader("/Users/danielwanganga/Desktop/FrontLine_Agent_Support/frontline/knowledge_base/AGENT_CUSTOMER_REGISTRATION.pdf")
+    loader = PDFPlumberLoader("/Users/danielwanganga/Documents/GitHub/PROJECT_FRONTLINE/INTERN_PROJECT/frontline/knowledge_base/Rudishiwa Troubleshooting Steps (6).pdf")
     docs = loader.load()
     
     # Define the text splitter
